@@ -1,16 +1,84 @@
-import { Text, View } from 'react-native';
+import { Text, View, Image, StyleSheet } from 'react-native';
 
 const RepositoryItem = ({ item }) => {
+
+    const styles = StyleSheet.create({
+        image: {
+            width: 50,
+            height: 50,
+            borderRadius: 5,
+        },
+        upperContainer: {
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            marginTop: 10,
+        },
+        upperContainerLeft: {
+            width: 50,
+        },
+        upperContainerRight: {
+            width: 300,
+            justifyContent: 'space-evenly',
+            height: 95,
+            alignItems: "flex-start",
+        },
+        lowerContainer: {
+            flexDirection: 'row',
+            justifyContent: "space-evenly",
+        },
+        lowerContainerItem: {
+            padding: 10
+        },
+        bold: {
+            fontWeight: "bold",
+        },
+        language: {
+            backgroundColor: "#0464CF",
+            color: "white",
+            borderRadius: 5,
+            padding: 4,
+            marginTop: 5,
+        },
+        grey: {
+            color: "grey",
+        }
+    });
+
+    const kFormat = (num) => {
+        return Math.abs(num) > 999 ? Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k' : Math.sign(num)*Math.abs(num)
+    }
+
     return (
-        <View>
-            <Text>{item.fullName}</Text>
-            <Text>{item.description}</Text>
-            <Text>{item.language}</Text>
-            <Text>Stars: {item.stargazersCount}</Text>
-            <Text>Forks: {item.forksCount}</Text>
-            <Text>Reviews: {item.reviewCount}</Text>
-            <Text>Rating avg: {item.ratingAverage}</Text>
-        </View>
+        <>
+            <View style={styles.upperContainer}>
+                <View style={styles.upperContainerLeft}>
+                    <Image style={styles.image} source={{ uri: item.ownerAvatarUrl }} />
+                </View>
+                <View style={styles.upperContainerRight}>
+                    <Text style={styles.bold}>{item.fullName}</Text>
+                    <Text style={styles.grey}>{item.description}</Text>
+                    <Text style={styles.language}>{item.language}</Text>
+                </View>
+            </View>
+            <View style={styles.lowerContainer}>
+                <View style={styles.lowerContainerItem}>
+                    <Text style={styles.bold}>{kFormat(item.stargazersCount)}</Text>
+                    <Text style={styles.grey}>Stars</Text>
+                </View>
+                <View style={styles.lowerContainerItem}>
+                    <Text style={styles.bold}>{kFormat(item.forksCount)}</Text>
+                    <Text style={styles.grey}>Forks</Text>
+                </View>
+                <View style={styles.lowerContainerItem}>
+                    <Text style={styles.bold}>{kFormat(item.reviewCount)}</Text>
+                    <Text style={styles.grey}>Reviews</Text>
+                </View>
+                <View style={styles.lowerContainerItem}>
+                    <Text style={styles.bold}>{kFormat(item.ratingAverage)}</Text>
+                    <Text style={styles.grey}>Rating</Text>
+                </View>
+            </View>
+        </>
     )
 };
 
