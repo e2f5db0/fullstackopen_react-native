@@ -1,6 +1,7 @@
 import { Pressable, Text, StyleSheet } from "react-native";
+import { Link } from 'react-router-native';
 
-const AppBarItem = ({ name }) => {
+const AppBarItem = ({ name, link }) => {
 
     const styles = StyleSheet.create({
         pressableItem: {
@@ -12,11 +13,13 @@ const AppBarItem = ({ name }) => {
 
     return (
         <>
-        <Pressable>
-            <Text style={styles.pressableItem}>
-                {name}
-            </Text>
-        </Pressable>
+            <Pressable>
+                <Link to={link}>
+                    <Text style={styles.pressableItem}>
+                        {name}
+                    </Text>
+                </Link>
+            </Pressable>
         </>
     )
 };
