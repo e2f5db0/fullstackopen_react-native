@@ -11,7 +11,13 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     inputInvalid: {
-        borderColor: "red",
+        borderColor: "#d73a4a",
+        borderWidth: 2,
+        padding: 10,
+        margin: 5,
+        borderRadius: 3,
+        marginLeft: 10,
+        marginRight: 10,
     }
 });
 
