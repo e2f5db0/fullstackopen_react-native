@@ -1,6 +1,11 @@
 import { View, StyleSheet, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 import AppBarItem from './AppBarItem';
+import Text from './Text';
+import useAuthStorage from '../hooks/useAuthStorage';
+import { useQuery, useApolloClient } from '@apollo/client';
+import { ME } from '../graphql/queries';
+import { useEffect, useState } from 'react/cjs/react.production.min';
 
 const styles = StyleSheet.create({
     container: {
@@ -12,16 +17,41 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
-    return (
-        <>
-            <View style={styles.container}>
-                <ScrollView horizontal>
-                    <AppBarItem name="Repositories" link={"/"} />
-                    <AppBarItem name="Sign In" link={"/signIn"} />
-                </ScrollView>
-            </View>
-        </>
-    );
-};
+    const authStorage = useAuthStorage();
+    const apolloClient = useApolloClient();
+
+    const { data, loading } = useQuery(ME, {
+        variables: {
+            Authorization: `Bearer ${authStorage.getAccessToken()}`,
+        },
+    });
+
+    const signOut = async () => {
+        await authStorage.removeAccessToken()
+        await apolloClient.resetStore()
+    }
+
+    if (loading) {
+        return (
+            <>
+                <View style={styles.container}>
+                    <Text>Loading...</Text>
+                </View>
+            </>
+        )
+    } else {
+        return (
+            <>
+                <View style={styles.container}>
+                    <ScrollView horizontal>
+                        <AppBarItem name="Repositories" link={"/"} />
+                        {!data.me ? <AppBarItem name="Sign In" link={"/signIn"} /> : null}
+                        {data.me ? <AppBarItem name="Sign out" signOut={signOut} /> : null}
+                    </ScrollView>
+                </View>
+            </>
+        );
+    };
+}
 
 export default AppBar;

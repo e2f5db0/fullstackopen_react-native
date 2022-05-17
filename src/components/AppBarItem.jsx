@@ -1,7 +1,7 @@
 import { Pressable, Text, StyleSheet } from "react-native";
 import { Link } from 'react-router-native';
 
-const AppBarItem = ({ name, link }) => {
+const AppBarItem = ({ name, link, signOut }) => {
 
     const styles = StyleSheet.create({
         pressableItem: {
@@ -11,17 +11,27 @@ const AppBarItem = ({ name, link }) => {
         }
     });
 
-    return (
-        <>
-            <Pressable>
-                <Link to={link}>
-                    <Text style={styles.pressableItem}>
-                        {name}
-                    </Text>
-                </Link>
-            </Pressable>
-        </>
-    )
+    if (signOut) {
+        return (
+            <>
+                <Pressable onPress={signOut}>
+                    <Text style={styles.pressableItem}>{name}</Text>
+                </Pressable>
+            </>
+        );
+    } else {
+        return (
+            <>
+                <Pressable>
+                    <Link to={link}>
+                        <Text style={styles.pressableItem}>
+                            {name}
+                        </Text>
+                    </Link>
+                </Pressable>
+            </>
+        );
+    }
 };
 
 export default AppBarItem;
