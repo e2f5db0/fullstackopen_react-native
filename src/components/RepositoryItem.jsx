@@ -55,26 +55,26 @@ const RepositoryItem = ({ item }) => {
                     <Image style={styles.image} source={{ uri: item.ownerAvatarUrl }} />
                 </View>
                 <View style={styles.upperContainerRight}>
-                    <Text style={styles.bold}>{item.fullName}</Text>
-                    <Text style={styles.grey}>{item.description}</Text>
-                    <Text style={styles.language}>{item.language}</Text>
+                    <Text testID='fullName' style={styles.bold}>{item.fullName}</Text>
+                    <Text testID='description' style={styles.grey}>{item.description}</Text>
+                    <Text testID='language' style={styles.language}>{item.language}</Text>
                 </View>
             </View>
-            <View style={styles.lowerContainer}>
+            <View testID='repoStats' style={styles.lowerContainer}>
                 <View style={styles.lowerContainerItem}>
-                    <Text style={styles.bold}>{kFormat(item.stargazersCount)}</Text>
+                    <Text testID='starCount' style={styles.bold}>{kFormat(item.stargazersCount)}</Text>
                     <Text style={styles.grey}>Stars</Text>
                 </View>
                 <View style={styles.lowerContainerItem}>
-                    <Text style={styles.bold}>{kFormat(item.forksCount)}</Text>
+                    <Text testID='forkCount' style={styles.bold}>{kFormat(item.forksCount)}</Text>
                     <Text style={styles.grey}>Forks</Text>
                 </View>
                 <View style={styles.lowerContainerItem}>
-                    <Text style={styles.bold}>{kFormat(item.reviewCount)}</Text>
+                    <Text testID='reviewCount' style={styles.bold}>{kFormat(item.reviewCount)}</Text>
                     <Text style={styles.grey}>Reviews</Text>
                 </View>
                 <View style={styles.lowerContainerItem}>
-                    <Text style={styles.bold}>{kFormat(item.ratingAverage)}</Text>
+                    <Text testID='ratingAvg' style={styles.bold}>{kFormat(item.ratingAverage)}</Text>
                     <Text style={styles.grey}>Rating</Text>
                 </View>
             </View>
