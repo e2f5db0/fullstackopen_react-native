@@ -68,6 +68,7 @@ const SingleRepo = () => {
 
     const { repositoryId } = useParams();
     const { data, loading } = useQuery(GET_SINGLE_REPO, {
+        fetchPolicy: 'cache-and-network',
         variables: {
             repositoryId: repositoryId,
         },
