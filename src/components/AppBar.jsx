@@ -5,7 +5,6 @@ import Text from './Text';
 import useAuthStorage from '../hooks/useAuthStorage';
 import { useQuery, useApolloClient } from '@apollo/client';
 import { ME } from '../graphql/queries';
-import { useEffect, useState } from 'react/cjs/react.production.min';
 
 const styles = StyleSheet.create({
     container: {

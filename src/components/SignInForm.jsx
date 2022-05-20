@@ -17,7 +17,7 @@ const SignInForm = ({ onSubmit }) => {
                 name="password"
                 placeholder="Password"
                 secureTextEntry />
-            <Button onSubmit={onSubmit} />
+            <Button onSubmit={onSubmit} text='Sign In' />
         </View>
     );
 };
