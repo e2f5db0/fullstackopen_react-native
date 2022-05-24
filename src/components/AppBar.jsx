@@ -47,6 +47,7 @@ const AppBar = () => {
                         {data.me ? <AppBarItem name="Create a review" link={"/review"} /> : null}
                         {!data.me ? <AppBarItem name="Sign In" link={"/signIn"} /> : null}
                         {data.me ? <AppBarItem name="Sign out" signOut={signOut} /> : null}
+                        {!data.me ? <AppBarItem name="Sign up" link={"/signUp"} /> : null}
                     </ScrollView>
                 </View>
             </>
