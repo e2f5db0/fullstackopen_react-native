@@ -7,6 +7,9 @@ import Text from "./Text";
 import { format } from 'date-fns'
 
 const styles = StyleSheet.create({
+    viewContainer: {
+        paddingBottom: 205
+    },
     separator: {
         height: 10,
         backgroundColor: "lightgrey",
@@ -67,12 +70,31 @@ const ReviewItem = ({ review }) => {
 const SingleRepo = () => {
 
     const { repositoryId } = useParams();
-    const { data, loading } = useQuery(GET_SINGLE_REPO, {
-        fetchPolicy: 'cache-and-network',
+    const { data, loading, fetchMore } = useQuery(GET_SINGLE_REPO, {
         variables: {
             repositoryId: repositoryId,
+            first: 6,
         },
     })
+    
+    const onEndReach = () => {
+        handleFetchMore()
+    };
+
+    const handleFetchMore = () => {
+        const canFetchMore = !loading && data?.repository.reviews.pageInfo.hasNextPage;
+    
+        if (!canFetchMore) {
+          return;
+        }
+    
+        fetchMore({
+          variables: {
+            after: data.repository.reviews.pageInfo.endCursor,
+            repositoryId: repositoryId,
+          },
+        });
+      };
 
     if (loading) {
         return (
@@ -83,14 +105,19 @@ const SingleRepo = () => {
         const reviewNodes = reviews
             ? reviews.edges.map(edge => edge.node)
             : [];
+
         return (
-            <FlatList
-                data={reviewNodes}
-                renderItem={({ item }) => <ReviewItem review={item} />}
-                keyExtractor={({ id }) => id}
-                ListHeaderComponent={() => <RepositoryInfo repository={data.repository} />}
-                ItemSeparatorComponent={ItemSeparator}
-            />
+            <View style={styles.viewContainer}>
+                <FlatList
+                    data={reviewNodes}
+                    renderItem={({ item }) => <ReviewItem review={item} />}
+                    keyExtractor={({ id }) => id}
+                    ListHeaderComponent={() => <RepositoryInfo repository={data.repository} />}
+                    ItemSeparatorComponent={ItemSeparator}
+                    onEndReached={onEndReach}
+                    onEndReachedThreshold={0.5}
+                />
+            </View>
         );
     }
 };

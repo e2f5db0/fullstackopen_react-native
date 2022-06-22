@@ -5,9 +5,11 @@ import useRepositories from '../hooks/useRepositories';
 import { useNavigate } from 'react-router-native';
 import { useDebounce } from 'use-debounce';
 import RepositoryListHeader from './RepositoryListHeader';
-import Text from './Text'
 
 const styles = StyleSheet.create({
+  viewContainer: {
+    paddingBottom: 205
+  },
   separator: {
     height: 10,
     backgroundColor: "lightgrey",
@@ -26,6 +28,10 @@ export class RepositoryListContainer extends React.Component {
   }
 
   componentDidMount() {
+    this.refreshRepos()
+  }
+
+  refreshRepos = () => {
     const { repositories } = this.state;
     const nodes = repositories
       ? repositories.edges.map(edge => edge.node)
@@ -62,15 +68,23 @@ export class RepositoryListContainer extends React.Component {
       repositoryNodes,
     } = this.state;
 
+    const {
+      onEndReach,
+    } = this.props;
+
     if (repositoryNodes.length > 0) {
       return (
-        <FlatList
-          data={repositoryNodes}
-          ItemSeparatorComponent={ItemSeparator}
-          renderItem={({ item }) => <PressableRepositoreyItem item={item} />}
-          keyExtractor={item => item.id}
-          ListHeaderComponent={this.renderHeader}
-        />
+        <View style={styles.viewContainer}>
+          <FlatList
+            data={repositoryNodes}
+            ItemSeparatorComponent={ItemSeparator}
+            renderItem={({ item }) => <PressableRepositoreyItem item={item} />}
+            keyExtractor={item => item.id}
+            ListHeaderComponent={this.renderHeader}
+            onEndReached={() => { onEndReach() && this.refreshRepos() }}
+            onEndReachedThreshold={0.5}
+          />
+        </View>
       )
     } else {
       return null
@@ -101,7 +115,15 @@ const RepositoryList = () => {
   const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
 
   const [selectedOrderBy, setSelectedOrderBy] = useState();
-  const { repositories } = useRepositories(selectedOrderBy, debouncedSearchQuery);
+  const { repositories, fetchMore } = useRepositories(
+    selectedOrderBy,
+    debouncedSearchQuery,
+    15
+  );
+
+  const onEndReach = () => {
+    fetchMore();
+  };
 
   if (repositories === undefined) {
     return null
@@ -112,6 +134,7 @@ const RepositoryList = () => {
     setSelectedOrderBy={setSelectedOrderBy}
     onChangeSearch={onChangeSearch}
     searchQuery={searchQuery}
+    onEndReach={onEndReach}
   />;
 };
 
